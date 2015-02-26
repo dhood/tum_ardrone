@@ -26,7 +26,6 @@ ExternalProject_Add(thirdparty
 	PREFIX ${CMAKE_BINARY_DIR}/thirdparty
 	CONFIGURE_COMMAND ""
 	BUILD_COMMAND make
-	INSTALL_COMMAND ""
 	BUILD_IN_SOURCE 1
 )
 
@@ -208,4 +207,36 @@ add_executable(drone_gui ${GUI_SOURCE_FILES} ${GUI_RESOURCE_FILES_CPP} ${GUI_UI_
 target_link_libraries(drone_gui ${QT_LIBRARIES} cvd ${catkin_LIBRARIES})
 add_dependencies(drone_gui thirdparty ${PROJECT_NAME}_gencpp ${PROJECT_NAME}_gencfg)
 
+#############
+## Install ##
+#############
+install(TARGETS drone_stateestimation drone_gui drone_autopilot
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+	LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(FILES
+	launch/tum_ardrone.launch 
+	launch/ardrone_driver.launch
+  	DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+)
+
+install(DIRECTORY camcalib flightPlans
+  	DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+	PATTERN ".svn" EXCLUDE
+	PATTERN ".git" EXCLUDE
+)
+
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/build/thirdparty/src/thirdparty/libcvd/lib/
+	DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+	PATTERN ".svn" EXCLUDE
+	PATTERN ".git" EXCLUDE
+)
+
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/build/thirdparty/src/thirdparty/gvars3/lib/
+	DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+	PATTERN ".svn" EXCLUDE
+	PATTERN ".git" EXCLUDE
+)
 
